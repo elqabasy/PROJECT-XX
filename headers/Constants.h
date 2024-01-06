@@ -1,0 +1,4 @@
+#ifndef PROJECT_XX_CONSTANTS_H
+#define PROJECT_XX_CONSTANTS_H
+
+#endif
