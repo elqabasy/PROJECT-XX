@@ -6,17 +6,18 @@
 #include "../headers/Constants.h"
 #include "../headers/Animation.h"
 using namespace std;
-using namespace Animation::Text;
+namespace CS = CONSOLE;
+namespace AT = Animation::Text;
 
 
-void Animation::Text::writing(const string& text, const int& delay, const int& direction, const int& row, const int& col, const string& endLine, const bool align, const short int rowAlign, const short int colAlign) {
+void AT::writing(const string& text, const int& delay, const int& direction, const int& row, const int& col, const string& endLine, const bool align, const short int rowAlign, const short int colAlign) {
     int lastRow = 0, lastColumn = 0;
     int choosenRow = 0, choosenColumn = 0;
     const int TEXT_SIZE = text.size();
     
     // check for any alignment before do anything
     if(align){
-        int rows, cols; Console::getConsoleSize(rows, cols); // save rows and cols to variables: rows, cols
+        int rows, cols; CS::getConsoleSize(rows, cols); // save rows and cols to variables: rows, cols
         const int length = text.size();
         int colPos = 0, rowPos = 0;
 
@@ -50,46 +51,46 @@ void Animation::Text::writing(const string& text, const int& delay, const int& d
         }
         
         choosenRow = rowPos; choosenColumn = colPos;
-        Console::setCursorPos(rowPos, colPos);
+        CS::setCursorPos(rowPos, colPos);
     }
 
 
     // get current position before update to new one
-    Console::getCursorPos(lastRow, lastColumn);
+    CS::getCursorPos(lastRow, lastColumn);
 
     // start writing at specific position
     if(row == -1){
         // this is mean default value
-        Console::getCusrorRowPos(choosenRow);
+        CS::getCusrorRowPos(choosenRow);
     }else{
         choosenRow = row;
     }
     if(col == -1){
         // this is mean default value
-        Console::getCusrorColPos(choosenColumn);
+        CS::getCusrorColPos(choosenColumn);
     }else{
         choosenColumn = col;
     }
     
-    Console::setCursorPos(choosenRow, choosenColumn);
+    CS::setCursorPos(choosenRow, choosenColumn);
 
     if(direction == -1){
         // left to right
         for (int i = 0; i < TEXT_SIZE; i++) {
-            Console::setCursorPos(choosenRow, choosenColumn + i + 1);
-            cout << text[i];
-            Console::sleep(delay);
+            CS::setCursorPos(choosenRow, choosenColumn + i + 1);
+            cout << text[i] << flush;
+            CS::sleep(delay);
 
         }
-        cout << endLine;
+        cout << endLine << flush;
     }else if (direction == 0){
         int leftCount = ceil(TEXT_SIZE / 2);
         int rightCount = TEXT_SIZE-leftCount;
 
 
         thread left(writing, text.substr(0, leftCount), delay, -1, choosenRow, choosenColumn, endLine, false, 0, 0);
-        Console::sleep(10);
-        thread right(writing, text.substr(leftCount-1, TEXT_SIZE-1), delay, 1, choosenRow, choosenColumn + leftCount - 1, endLine, false, 0, 0);
+        CS::sleep(1);
+        thread right(writing, text.substr(leftCount-1, TEXT_SIZE-1), delay , 1, choosenRow, choosenColumn + leftCount - 1, endLine, false, 0, 0);
         
         left.join();
         right.join();
@@ -98,11 +99,11 @@ void Animation::Text::writing(const string& text, const int& delay, const int& d
     }else if (direction == 1){
         // right to left
         for(int x = text.size()-1; x >= 0; x--){
-            Console::setCursorPos(choosenRow, choosenColumn + x + 1);
-            cout << text[x];
-            Console::sleep(delay);
+            CS::setCursorPos(choosenRow, choosenColumn + x + 1);
+            cout << text[x] << flush;
+            CS::sleep(delay);
         }
-        Console::setCursorPos(choosenRow, choosenColumn + TEXT_SIZE);
-        cout << endLine;
+        CS::setCursorPos(choosenRow, choosenColumn + TEXT_SIZE);
+        cout << endLine << flush;
     }
 }
