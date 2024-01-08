@@ -7,17 +7,16 @@
 #include "../headers/Animation.h"
 using namespace std;
 namespace CS = CONSOLE;
-namespace AT = Animation::Text;
 
 
-void AT::writing(const string& text, const int& delay, const int& direction, const int& row, const int& col, const string& endLine, const bool align, const short int rowAlign, const short int colAlign) {
-    int lastRow = 0, lastColumn = 0;
-    int choosenRow = 0, choosenColumn = 0;
+void Animation::Text::writing(const string& text, const int& delay, const short int& direction, const short int& row, const short int& col, const string& endLine, const bool& align, const short int& rowAlign, const short int& colAlign) {
     const int TEXT_SIZE = text.size();
+    short int lastRow = 0, lastColumn = 0;
+    short int choosenRow = 0, choosenColumn = 0;
     
     // check for any alignment before do anything
     if(align){
-        int rows, cols; CS::getConsoleSize(rows, cols); // save rows and cols to variables: rows, cols
+        short int rows, cols; CS::getConsoleSize(rows, cols); // save rows and cols to variables: rows, cols
         const int length = text.size();
         int colPos = 0, rowPos = 0;
 
