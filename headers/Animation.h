@@ -6,7 +6,7 @@ using namespace std;
 
 namespace Animation{
     namespace Text{
-        void writing(const string& text, const int& delay = 0, const int& direction = -1, const int& row = -1, const int& col = -1, const string& endLine = "\n", const bool align = false, const short int rowAlign = -1, const short int colAlign = -1);
+        void writing(const string& text, const int& delay = 1000, const short int& direction = -1, const short int& row = -1, const short int& col = -1, const string& endLine = "\n", const bool& align = false, const short int& rowAlign = -1, const short int& colAlign = -1);
     }
 }
 #endif
