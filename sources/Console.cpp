@@ -63,3 +63,61 @@ void CONSOLE::print(const string& text, const short int& row, const short int& c
     CONSOLE::setCursorPos(cRow, cCol);
     cout << text << endLine;
 }
+
+
+// not work for end
+void CONSOLE::STYLE::getFontColor(unsigned short int& color){
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    color = info.wAttributes;
+}
+
+void CONSOLE::STYLE::setFontColor(const unsigned short int& color){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+}
+
+void CONSOLE::STYLE::getBackColor(unsigned short int& color){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
+    GetConsoleScreenBufferInfo(hConsole, &bufferInfo);
+
+    WORD currentAttributes = bufferInfo.wAttributes;
+    WORD backgroundColorMask = 0x00F0;
+
+    color = (currentAttributes & backgroundColorMask) >> 4;
+}
+
+void CONSOLE::STYLE::setBackColor(const unsigned short int& color){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
+    GetConsoleScreenBufferInfo(hConsole, &bufferInfo);
+
+    WORD mask = 0xFFF0;
+
+    WORD newAttributes = (bufferInfo.wAttributes & mask) | color;
+    SetConsoleTextAttribute(hConsole, newAttributes);
+}
+
+
+void CONSOLE::STYLE::getFontSize(unsigned short int& width, unsigned short int& height){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_FONT_INFO fontInfo;
+    GetCurrentConsoleFont(hConsole, FALSE, &fontInfo);
+
+    COORD fontSize = fontInfo.dwFontSize;
+    width = fontSize.X; height = fontSize.Y;
+}
+void CONSOLE::STYLE::setFontSize(const unsigned short int& width, const unsigned short int& height){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_FONT_INFOEX fontInfo;
+    fontInfo.cbSize = sizeof(fontInfo);
+    fontInfo.nFont = 0;
+    fontInfo.dwFontSize.X = width;
+    fontInfo.dwFontSize.Y = height;
+
+    SetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
+}
