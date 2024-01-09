@@ -1,10 +1,10 @@
 #include <iostream>
 #include "headers/Console.h"
+#include <tabulate/table.hpp>
 using namespace std;
-namespace CS = CONSOLE;
-
+using namespace tabulate;
 
 int main(){ 
     system("cls");
-    return 0;
+    return 0;   
 }
